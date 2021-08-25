@@ -1,0 +1,25 @@
+{
+    "init_args": [
+        {
+            "output_hidden_states": false,
+            "output_attentions": false,
+            "use_cache": true,
+            "use_return_dict": true,
+            "tie_word_embeddings": true,
+            "attn_pdrop": 0.1,
+            "dff": 2,
+            "embd_pdrop": 0.1,
+            "initializer_range": 0.02,
+            "layer_norm_epsilon": 1e-06,
+            "n_embd": 16,
+            "n_head": 2,
+            "n_layer": 2,
+            "n_positions": 50000,
+            "resid_pdrop": 0.1,
+            "vocab_size": 246534,
+            "pad_token_id": null,
+            "init_class": "CTRLModel"
+        }
+    ],
+    "init_class": "CTRLLMHeadModel"
+}
