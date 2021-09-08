@@ -160,12 +160,12 @@ class SinusoidalPositionalEmbedding(nn.Embedding):
 
 ## 修改完上述2处后，进行double精度下对齐，本次在GPU条件下对齐48层的模型（设备V100 32G）。
 
-(1) 下载权重 https://huggingface.co/ctrl/ 中的`pytorch_model.bin`放进 `hg/ctrl`文件夹对应目录。
-(2) 运行`python convert.py`将这个权重转化为paddle的双精度的权重。
-(3) 修改`compare_lm.py` Line21的`pd = True`变量，然后运行`python compare_lm.py`,生成paddle版本的`logits`和`hidden states`结果。
-(4) 修改`compare_lm.py` Line21的`pd = False`变量，然后运行`python compare_lm.py`,生成pytorch版本的`logits`和`hidden states`结果。
-(5) 运行`python bijiao.py`，得到中间变量的结果`bijiaojieguo.txt`。
-(6) 打开`compare_loss_hiddenstate.ipynb`，一行一行运行，对比`logits`和`hidden states`结果。
+- (1) 下载权重 https://huggingface.co/ctrl/ 中的`pytorch_model.bin`放进 `hg/ctrl`文件夹对应目录。
+- (2) 运行`python convert.py`将这个权重转化为paddle的双精度的权重。
+- (3) 修改`compare_lm.py` Line21的`pd = True`变量，然后运行`python compare_lm.py`,生成paddle版本的`logits`和`hidden states`结果。
+- (4) 修改`compare_lm.py` Line21的`pd = False`变量，然后运行`python compare_lm.py`,生成pytorch版本的`logits`和`hidden states`结果。
+- (5) 运行`python bijiao.py`，得到中间变量的结果`bijiaojieguo.txt`。
+- (6) 打开`compare_loss_hiddenstate.ipynb`，一行一行运行，对比`logits`和`hidden states`结果。
 
 ### 结果如下：
 #### logits对比
