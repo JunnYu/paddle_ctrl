@@ -1,5 +1,7 @@
 # double精度下对比
 
+# 注：48层模型太大，而且是双精度的，32G的显存只能放下一个模型，因此分别进行了前向传播，然后对比两次的结果！
+
 ## 发现可能的问题：
 （1）在double精度下，pytorch的`matmul_qk / np.sqrt(dk)`与paddle的`matmul_qk / np.sqrt(dk)`结果不一致。
 
