@@ -52,6 +52,103 @@ python compare_tokenizer.py
 # attention_mask: True
 ```
 
+# 比较生成的文本
+
+## paddle版本生成结果：`PADDLE-GENERATE.ipynb`
+```python
+Diet English : I lost 10 kgs! ; German : 
+ Ich habe zehn Kilogramm abgenommen! 
+ 
+ Als ich das erste Mal mit meinem Smartphone war, war es ein wenig schwierig zu finden, wo man die App herunterladen kann. Aber jetzt ist sie da. 
+ 
+ Das Smartphone hat mich auch sehr beeindruckt. Es machte mir viel Spaß. Und so funktioniert mein Leben heute ganz einfach und ohne große Probleme. 
+ 
+ Mein Fazit: Wenn du deine Apps auf dem iPhone oder Android
+==================================================
+Reviews Rating: 5.0
+ I have been using this product for a few years now and it is the best thing on the market to keep your teeth white. It does not taste bad at all like some of these other products do. The only problem with this product is that you need to use it every day or else they will start coming back in after about 2 weeks. But if you do that, then it's worth it. You can also buy them from Amazon but shipping takes forever. So just make sure you order enough so you don't run out. 
+ Rating: 5.0 
+ This stuff works great. My dentist recommended it, and I'm glad he did. It's easy to use, tastes good, and
+==================================================
+Questions Q: What is the capital of India?
+ A: mumbai. 
+ Q: Who was a British politician who served as Prime Minister from 1922 to 1924? 
+ A: edward viibert 
+ Q: The name of which city in New South Wales has been used for many years by the Australian National Football team? 
+ A: sydney 
+ Q: Which American actor starred with his wife and daughter on the television series 'Family Affair'? 
+ A: james coburn 
+ Q: In what year did the first edition of this book appear? 
+ A: 1962 
+ Q: How long does it take to make one pound of sausage? 
+ A: 24 hours
+==================================================
+Books Weary with toil, I haste me to my bed,
+ And sleep till the morning of life is come. 
+ The sun has risen and his beams are bright, 
+ But still he shines upon a world forlorn; 
+ He sees no more its joys or griefs below, 
+ Nor hears their murmur as they pass below. 
+ My heart grows weary for the world's delight, 
+ For all that makes it dear in human eyes; 
+ It feels like one who wanders through an empty land, 
+ With nothing left but desolation there. 
+ O God! how long shall this be mine abode, 
+ Where every joy hath passed away from me? 
+ How long, O God, must I thus wander here, 
+ In sorrow
+==================================================
+```
+
+## huggingface版本生成结果：`PYTORCH-GENERATE.ipynb`
+```python
+Diet English : I lost 10 kgs! ; German : Ich habe zehn Kilogramm abgenommen! 
+ 
+ Als ich das erste Mal mit meinem Smartphone war, war es ein wenig schwierig zu finden, wo man die App herunterladen kann. Aber jetzt ist sie da. 
+ 
+ Das Smartphone hat mich auch sehr beeindruckt. Es machte mir viel Spaß. Und so funktioniert mein Leben heute ganz einfach und ohne große Probleme. 
+ 
+ Mein Fazit: Wenn du deine Apps auf dem iPhone oder Android
+==================================================
+Reviews Rating: 5.0 
+ I have been using this product for a few years now and it is the best thing on the market to keep your teeth white. It does not taste bad at all like some of these other products do. The only problem with this product is that you need to use it every day or else they will start coming back in after about 2 weeks. But if you do that, then it's worth it. You can also buy them from Amazon but shipping takes forever. So just make sure you order enough so you don't run out. 
+ Rating: 5.0 
+ This stuff works great. My dentist recommended it, and I'm glad he did. It's easy to use, tastes good, and
+==================================================
+Questions Q: What is the capital of India? 
+ A: mumbai. 
+ Q: Who was a British politician who served as Prime Minister from 1922 to 1924? 
+ A: edward viibert 
+ Q: The name of which city in New South Wales has been used for many years by the Australian National Football team? 
+ A: sydney 
+ Q: Which American actor starred with his wife and daughter on the television series 'Family Affair'? 
+ A: james coburn 
+ Q: In what year did the first edition of this book appear? 
+ A: 1962 
+ Q: How long does it take to make one pound of sausage? 
+ A: 24 hours
+==================================================
+Books Weary with toil, I haste me to my bed, 
+ And sleep till the morning of life is come. 
+ The sun has risen and his beams are bright, 
+ But still he shines upon a world forlorn; 
+ He sees no more its joys or griefs below, 
+ Nor hears their murmur as they pass below. 
+ My heart grows weary for the world's delight, 
+ For all that makes it dear in human eyes; 
+ It feels like one who wanders through an empty land, 
+ With nothing left but desolation there. 
+ O God! how long shall this be mine abode, 
+ Where every joy hath passed away from me? 
+ How long, O God, must I thus wander here, 
+ In sorrow
+==================================================
+```
+
+# 注意：
+- paddlenlp中未实现`RepetitionPenaltyLogitsProcessor`,且使用paddle实现这个可能较为复杂。因此我这里使用了torch代码（反正是解码过程，随便使用）。
+- paddlenlp的generate与huggingface的generate有些许区别，huggingface的generate时候max_length包含你输入的文本，而paddlenlp的generate的max_seq_len不包括，因此我设置最大长度时候减去了文本长度。
+
 # Reference
 
 ```bibtex
