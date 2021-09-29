@@ -146,9 +146,24 @@ Books Weary with toil, I haste me to my bed,
 ```
 
 # 注意：
-- paddlenlp中未实现`RepetitionPenaltyLogitsProcessor`,且使用paddle实现这个可能较为复杂。因此我这里使用了torch代码（反正是解码过程，随便使用）。
+- paddlenlp中未实现`RepetitionPenaltyLogitsProcessor`,本项目使用两种方法实现该方法。
 - paddlenlp的generate与huggingface的generate有些许区别，huggingface的generate时候max_length包含你输入的文本，而paddlenlp的generate的max_seq_len不包括，因此我设置最大长度时候减去了文本长度。
 
+```python
+def __call__(self, input_ids, logits):
+    # method 1 使用了for循环，好理解，速度不一定快
+    # score = paddle.index_sample(logits, input_ids)
+    # score = paddle.where(score < 0, score * self.penalty, score / self.penalty)
+    # outputs = [paddle.scatter(logit,input_id,score_) for logit,input_id,score_ in zip(logits,input_ids,score)]
+    # return paddle.stack(outputs,axis=0)
+
+    # method2 与之前reformer类似，同样采用了添加offset的方法，使用scatter对flatten后的输入进行操作。
+    score = paddle.index_sample(logits, input_ids)
+    score = paddle.where(score < 0, score * self.penalty, score / self.penalty)
+    input_ids = input_ids + paddle.arange(logits.shape[
+        0]).unsqueeze(-1) * logits.shape[-1]
+    return paddle.scatter(logits.flatten(),input_ids.flatten(),score.flatten()).reshape(logits.shape)
+```
 # Reference
 
 ```bibtex

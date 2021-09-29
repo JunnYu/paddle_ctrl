@@ -1024,7 +1024,6 @@ class MinLengthLogitsProcessor(LogitsProcessor):
             logits[:, self.eos_token_id] = -1e9
         return logits
 
-import torch
 class RepetitionPenaltyLogitsProcessor(LogitsProcessor):
     r"""
     enforcing an exponential penalty on repeated sequences.
@@ -1041,12 +1040,15 @@ class RepetitionPenaltyLogitsProcessor(LogitsProcessor):
         self.penalty = penalty
 
     def __call__(self, input_ids, logits):
-        input_ids = torch.from_numpy(input_ids.numpy())
-        scores = torch.from_numpy(logits.numpy())
-        score = torch.gather(scores, 1, input_ids)
+        # method 1
+        # score = paddle.index_sample(logits, input_ids)
+        # score = paddle.where(score < 0, score * self.penalty, score / self.penalty)
+        # outputs = [paddle.scatter(logit,input_id,score_) for logit,input_id,score_ in zip(logits,input_ids,score)]
+        # return paddle.stack(outputs,axis=0)
 
-        # if score < 0 then repetition penalty has to be multiplied to reduce the previous token probability
-        score = torch.where(score < 0, score * self.penalty, score / self.penalty)
-
-        scores.scatter_(1, input_ids, score)
-        return paddle.to_tensor(scores.numpy())
+        # method2
+        score = paddle.index_sample(logits, input_ids)
+        score = paddle.where(score < 0, score * self.penalty, score / self.penalty)
+        input_ids = input_ids + paddle.arange(logits.shape[
+            0]).unsqueeze(-1) * logits.shape[-1]
+        return paddle.scatter(logits.flatten(),input_ids.flatten(),score.flatten()).reshape(logits.shape)
